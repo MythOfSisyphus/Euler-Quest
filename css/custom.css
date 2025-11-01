@@ -1,0 +1,195 @@
+   /* Perfect Prism.js integration with Water.css */
+   .code-container {
+       position: relative;
+       margin: 1.5rem 0;
+   }
+
+   pre[class*="language-"] {
+       background: #f8f9fa !important;
+       border: 1px solid #e9ecef;
+       border-radius: 15px;
+       margin: 0;
+       box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+   }
+
+   code[class*="language-"] {
+       background: #f8f9fa !important;
+       text-shadow: none !important;
+       color: #2b2b2b;
+   }
+
+   /* FIX: Remove operator background in Python */
+   .token.operator,
+   .token.entity,
+   .token.url,
+   .language-css .token.string,
+   .style .token.string {
+       background: none !important;
+   }
+
+   .copy-btn {
+       position: absolute;
+       top: 0.75rem;
+       right: 0.75rem;
+       background: rgba(255, 255, 255, 0.9);
+       border: 1px solid #dee2e6;
+       padding: 0.4rem 0.8rem;
+       border-radius: 4px;
+       cursor: pointer;
+       font-size: 0.8em;
+       font-family: inherit;
+       transition: all 0.2s ease;
+       backdrop-filter: blur(4px);
+   }
+
+   .copy-btn:hover {
+       background: white;
+       border-color: #adb5bd;
+   }
+
+   /* Perfect token colors for Water.css light theme */
+   .token.comment,
+   .token.prolog,
+   .token.doctype,
+   .token.cdata {
+       color: #6a737d;
+   }
+
+   .token.punctuation {
+       color: #495057;
+   }
+
+   .token.property,
+   .token.tag,
+   .token.boolean,
+   .token.number,
+   .token.constant,
+   .token.symbol,
+   .token.deleted {
+       color: #d73a49;
+   }
+
+   .token.selector,
+   .token.attr-name,
+   .token.string,
+   .token.char,
+   .token.builtin,
+   .token.inserted {
+       color: #032f62;
+   }
+
+   .token.operator,
+   .token.entity,
+   .token.url {
+       color: #6f42c1;
+   }
+
+   .token.atrule,
+   .token.attr-value,
+   .token.keyword {
+       color: #d73a49;
+   }
+
+   .token.function,
+   .token.class-name {
+       color: #6f42c1;
+   }
+
+   /* Dark mode support - matches Water.css dark theme */
+   @media (prefers-color-scheme: dark) {
+       pre[class*="language-"] {
+           background: #1a1d23 !important;
+           border-color: #2d3748;
+       }
+
+       code[class*="language-"] {
+           background: #1a1d23 !important;
+           color: #e2e8f0;
+       }
+
+       .copy-btn {
+           background: rgba(45, 55, 72, 0.9);
+           border-color: #4a5568;
+           color: #e2e8f0;
+       }
+
+       .copy-btn:hover {
+           background: #2d3748;
+       }
+
+       /* FIX: Remove operator background in Python for dark mode */
+       .token.operator,
+       .token.entity,
+       .token.url,
+       .language-css .token.string,
+       .style .token.string {
+           background: none !important;
+       }
+
+       /* Dark mode token colors */
+       .token.comment,
+       .token.prolog,
+       .token.doctype,
+       .token.cdata {
+           color: #a0aec0;
+       }
+
+       .token.punctuation {
+           color: #cbd5e0;
+       }
+
+       .token.property,
+       .token.tag,
+       .token.boolean,
+       .token.number,
+       .token.constant,
+       .token.symbol,
+       .token.deleted {
+           color: #fc8181;
+       }
+
+       .token.selector,
+       .token.attr-name,
+       .token.string,
+       .token.char,
+       .token.builtin,
+       .token.inserted {
+           color: #90cdf4;
+       }
+
+       .token.operator,
+       .token.entity,
+       .token.url {
+           color: #d6bcfa;
+       }
+
+       .token.atrule,
+       .token.attr-value,
+       .token.keyword {
+           color: #fc8181;
+       }
+
+       .token.function,
+       .token.class-name {
+           color: #d6bcfa;
+       }
+   }
+
+   /* Container for centering content */
+   .container {
+       max-width: 800px;
+       margin: 0 auto;
+       /* padding: 2rem 1rem; */
+   }
+
+   /* Responsive */
+   @media (max-width: 600px) {
+       .container {
+           padding: 1rem 0.5rem;
+       }
+
+       pre[class*="language-"] {
+           padding: 1rem;
+           font-size: 0.9em;
+       }
+    }
