@@ -1,277 +1,328 @@
-   /* Perfect Prism.js integration with Water.css */
-   .code-container {
-       position: relative;
-       margin: 1.5rem 0;
-   }
+/* Perfect Prism.js integration with Water.css */
+.code-container {
+    position: relative;
+    margin: 1.5rem 0;
+}
 
-   pre[class*="language-"] {
-       background: #f8f9fa !important;
-       border: 1px solid #e9ecef;
-       border-radius: 15px;
-       margin: 0;
-       box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-   }
+pre[class*="language-"] {
+    background: #f8f9fa !important;
+    border: 1px solid #e9ecef;
+    border-radius: 15px;
+    margin: 0;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
 
-   code[class*="language-"] {
-       background: #f8f9fa !important;
-       text-shadow: none !important;
-       color: #2b2b2b;
-   }
+code[class*="language-"] {
+    background: #f8f9fa !important;
+    text-shadow: none !important;
+    color: #2b2b2b;
+}
 
-   /* FIX: Remove operator background in Python */
-   .token.operator,
-   .token.entity,
-   .token.url,
-   .language-css .token.string,
-   .style .token.string {
-       background: none !important;
-   }
+/* FIX: Remove operator background in Python */
+.token.operator,
+.token.entity,
+.token.url,
+.language-css .token.string,
+.style .token.string {
+    background: none !important;
+}
 
-   .copy-btn {
-       position: absolute;
-       top: 0.75rem;
-       right: 0.75rem;
-       background: rgba(255, 255, 255, 0.9);
-       border: 1px solid #dee2e6;
-       padding: 0.4rem 0.8rem;
-       border-radius: 4px;
-       cursor: pointer;
-       font-size: 0.8em;
-       font-family: inherit;
-       transition: all 0.2s ease;
-       backdrop-filter: blur(4px);
-   }
+.copy-btn {
+    position: absolute;
+    top: 0.75rem;
+    right: 0.75rem;
+    background: rgba(255, 255, 255, 0.9);
+    border: 1px solid #dee2e6;
+    padding: 0.4rem 0.8rem;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.8em;
+    font-family: inherit;
+    transition: all 0.2s ease;
+    backdrop-filter: blur(4px);
+}
 
-   .copy-btn:hover {
-       background: white;
-       border-color: #adb5bd;
-   }
+.copy-btn:hover {
+    background: white;
+    border-color: #adb5bd;
+}
 
-   /* Perfect token colors for Water.css light theme */
-   .token.comment,
-   .token.prolog,
-   .token.doctype,
-   .token.cdata {
-       color: #6a737d;
-   }
+/* Perfect token colors for Water.css light theme */
+.token.comment,
+.token.prolog,
+.token.doctype,
+.token.cdata {
+    color: #6a737d;
+}
 
-   .token.punctuation {
-       color: #495057;
-   }
+.token.punctuation {
+    color: #495057;
+}
 
-   .token.property,
-   .token.tag,
-   .token.boolean,
-   .token.number,
-   .token.constant,
-   .token.symbol,
-   .token.deleted {
-       color: #d73a49;
-   }
+.token.property,
+.token.tag,
+.token.boolean,
+.token.number,
+.token.constant,
+.token.symbol,
+.token.deleted {
+    color: #d73a49;
+}
 
-   .token.selector,
-   .token.attr-name,
-   .token.string,
-   .token.char,
-   .token.builtin,
-   .token.inserted {
-       color: #032f62;
-   }
+.token.selector,
+.token.attr-name,
+.token.string,
+.token.char,
+.token.builtin,
+.token.inserted {
+    color: #032f62;
+}
 
-   .token.operator,
-   .token.entity,
-   .token.url {
-       color: #6f42c1;
-   }
+.token.operator,
+.token.entity,
+.token.url {
+    color: #6f42c1;
+}
 
-   .token.atrule,
-   .token.attr-value,
-   .token.keyword {
-       color: #d73a49;
-   }
+.token.atrule,
+.token.attr-value,
+.token.keyword {
+    color: #d73a49;
+}
 
-   .token.function,
-   .token.class-name {
-       color: #6f42c1;
-   }
+.token.function,
+.token.class-name {
+    color: #6f42c1;
+}
 
-   /* Dark mode support - matches Water.css dark theme */
-   @media (prefers-color-scheme: dark) {
-       pre[class*="language-"] {
-           background: #1a1d23 !important;
-           border-color: #2d3748;
-       }
+/* Dark mode support - matches Water.css dark theme */
+@media (prefers-color-scheme: dark) {
+    pre[class*="language-"] {
+        background: #1a1d23 !important;
+        border-color: #2d3748;
+    }
 
-       code[class*="language-"] {
-           background: #1a1d23 !important;
-           color: #e2e8f0;
-       }
+    code[class*="language-"] {
+        background: #1a1d23 !important;
+        color: #e2e8f0;
+    }
 
-       .copy-btn {
-           background: rgba(45, 55, 72, 0.9);
-           border-color: #4a5568;
-           color: #e2e8f0;
-       }
+    .copy-btn {
+        background: rgba(45, 55, 72, 0.9);
+        border-color: #4a5568;
+        color: #e2e8f0;
+    }
 
-       .copy-btn:hover {
-           background: #2d3748;
-       }
+    .copy-btn:hover {
+        background: #2d3748;
+    }
 
-       /* FIX: Remove operator background in Python for dark mode */
-       .token.operator,
-       .token.entity,
-       .token.url,
-       .language-css .token.string,
-       .style .token.string {
-           background: none !important;
-       }
+    /* FIX: Remove operator background in Python for dark mode */
+    .token.operator,
+    .token.entity,
+    .token.url,
+    .language-css .token.string,
+    .style .token.string {
+        background: none !important;
+    }
 
-       /* Dark mode token colors */
-       .token.comment,
-       .token.prolog,
-       .token.doctype,
-       .token.cdata {
-           color: #a0aec0;
-       }
+    /* Dark mode token colors */
+    .token.comment,
+    .token.prolog,
+    .token.doctype,
+    .token.cdata {
+        color: #a0aec0;
+    }
 
-       .token.punctuation {
-           color: #cbd5e0;
-       }
+    .token.punctuation {
+        color: #cbd5e0;
+    }
 
-       .token.property,
-       .token.tag,
-       .token.boolean,
-       .token.number,
-       .token.constant,
-       .token.symbol,
-       .token.deleted {
-           color: #fc8181;
-       }
+    .token.property,
+    .token.tag,
+    .token.boolean,
+    .token.number,
+    .token.constant,
+    .token.symbol,
+    .token.deleted {
+        color: #fc8181;
+    }
 
-       .token.selector,
-       .token.attr-name,
-       .token.string,
-       .token.char,
-       .token.builtin,
-       .token.inserted {
-           color: #90cdf4;
-       }
+    .token.selector,
+    .token.attr-name,
+    .token.string,
+    .token.char,
+    .token.builtin,
+    .token.inserted {
+        color: #90cdf4;
+    }
 
-       .token.operator,
-       .token.entity,
-       .token.url {
-           color: #d6bcfa;
-       }
+    .token.operator,
+    .token.entity,
+    .token.url {
+        color: #d6bcfa;
+    }
 
-       .token.atrule,
-       .token.attr-value,
-       .token.keyword {
-           color: #fc8181;
-       }
+    .token.atrule,
+    .token.attr-value,
+    .token.keyword {
+        color: #fc8181;
+    }
 
-       .token.function,
-       .token.class-name {
-           color: #d6bcfa;
-       }
-   }
+    .token.function,
+    .token.class-name {
+        color: #d6bcfa;
+    }
+}
 
-   /* Container for centering content */
-   .container {
-       max-width: 800px;
-       margin: 0 auto;
-       /* padding: 2rem 1rem; */
-   }
+/* Container for centering content */
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+}
 
-   /* Quick heading fix */
-   .container h3 {
-       font-size: 1.4rem;
-       font-weight: 600;
-       margin: 1.75rem 0 0.75rem 0;
-   }
+/* But add some mobile safety */
+@media (max-width: 600px) {
+    .container {
+        padding: 1rem 0.5rem; /* Minimal side padding only on mobile */
+    }
+}
 
-   /* Responsive */
-   @media (max-width: 600px) {
-       .container {
-           padding: 1rem 0.5rem;
-       }
+/* Quick heading fix */
+.container h3 {
+    font-size: 1.4rem;
+    font-weight: 600;
+    margin: 1.75rem 0 0.75rem 0;
+}
 
-       pre[class*="language-"] {
-           padding: 1rem;
-           font-size: 0.9em;
-       }
-   }
+/* ===== INTERACTIVE SECTION STYLING ===== */
+.try-section {
+    margin-top: 2rem;
+    padding: 1.5rem;
+    background: #f8f9fa;
+    border: 1px solid #e9ecef;
+    border-radius: 10px;
+}
 
-   /* Interactive form styling (matches homepage search style) */
-   .try-section {
-       margin-top: 2rem;
-       padding: 1.5rem;
-       background: #f8f9fa;
-       border: 1px solid #e9ecef;
-       border-radius: 10px;
-   }
+.try-section + .try-section {
+    margin-top: 3rem;
+}
 
-   .try-section+.try-section {
-       margin-top: 3rem;
-   }
+.try-section h3 {
+    margin-top: 0;
+    text-align: center;
+    color: #2b2b2b;
+}
 
+.try-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    align-items: center;
+    justify-content: center;
+}
 
-   .try-section h3 {
-       margin-top: 0;
-       text-align: center;
-   }
+.try-container label {
+    font-weight: 600;
+    margin-right: 0.25rem;
+    white-space: nowrap;
+}
 
-   .try-container {
-       display: flex;
-       flex-wrap: wrap;
-       gap: 0.75rem;
-       align-items: center;
-       justify-content: center;
-   }
+.try-container input {
+    padding: 0.6rem 0.8rem;
+    border: 1px solid #dee2e6;
+    border-radius: 6px;
+    font-size: 1em;
+    min-width: 80px;
+    flex: 1;
+    max-width: 120px;
+}
 
-   .try-container label {
-       font-weight: 600;
-       margin-right: 0.25rem;
-   }
+.try-container button {
+    padding: 0.6rem 1.4rem;
+    background: #007bff;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 1em;
+    transition: background 0.2s ease;
+    white-space: nowrap;
+}
 
-   .try-container input {
-       padding: 0.6rem 0.8rem;
-       border: 1px solid #dee2e6;
-       border-radius: 6px;
-       font-size: 1em;
-       width: 120px;
-   }
+.try-container button:hover {
+    background: #0056b3;
+}
 
-   .try-container button {
-       padding: 0.6rem 1.4rem;
-       background: #007bff;
-       color: white;
-       border: none;
-       border-radius: 6px;
-       cursor: pointer;
-       font-size: 1em;
-       transition: background 0.2s ease;
-   }
+#result {
+    font-weight: 600;
+    margin-top: 1rem;
+    text-align: center;
+    min-height: 2rem;
+}
 
-   .try-container button:hover {
-       background: #0056b3;
-   }
+/* ===== RESPONSIVE DESIGN ===== */
+@media (max-width: 768px) {
+    .container {
+        padding: 1rem;
+    }
+    
+    .try-container {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 1rem;
+    }
+    
+    .try-container label {
+        margin-bottom: 0.25rem;
+        align-self: flex-start;
+    }
+    
+    .try-container input {
+        max-width: none;
+        width: 100%;
+    }
+    
+    .try-container button {
+        width: 100%;
+        margin-top: 0.5rem;
+    }
+    
+    pre[class*="language-"] {
+        padding: 1rem;
+        font-size: 0.9em;
+        border-radius: 10px;
+    }
+}
 
-   #result {
-       font-weight: 600;
-       margin-top: 1rem;
-       text-align: center;
-   }
+@media (max-width: 480px) {
+    .container {
+        padding: 0.5rem;
+    }
+    
+    .try-section {
+        padding: 1rem;
+    }
+    
+    .try-container {
+        gap: 0.5rem;
+    }
+}
 
-   /* Dark mode consistency */
-   @media (prefers-color-scheme: dark) {
-       .try-section {
-           background: #1a1d23;
-           border-color: #2d3748;
-       }
+/* Dark mode consistency */
+@media (prefers-color-scheme: dark) {
+    .try-section {
+        background: #1a1d23;
+        border-color: #2d3748;
+    }
 
-       .try-container input {
-           background: #2d3748;
-           border-color: #4a5568;
-           color: #e2e8f0;
-       }
-   }
+    .try-section h3 {
+        color: #e2e8f0;
+    }
+
+    .try-container input {
+        background: #2d3748;
+        border-color: #4a5568;
+        color: #e2e8f0;
+    }
+}

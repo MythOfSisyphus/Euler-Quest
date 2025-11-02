@@ -62,7 +62,7 @@
 
         <hr>
         <!-- ---------------------------------------------------------------------------------------------------- -->
-        
+
         <h2>One line intuition</h2>
 
         <blockquote>
@@ -71,7 +71,7 @@
             by $2$ by going left-to-right, writing down the digit you get and carrying the overflow to the next
             column.
         </blockquote>
-        
+
         <hr>
         <!-- ---------------------------------------------------------------------------------------------------- -->
 
@@ -127,7 +127,7 @@
                 after that loop
                 ends that's where <b>while(carry)</b> appends the digits.
             </p>
-        </div> 
+        </div>
 
         <hr>
         <!-- ---------------------------------------------------------------------------------------------------- -->
@@ -141,26 +141,26 @@
                 calculate digital sum
                 of any positive integer in any base.
             </p>
-            
+
             <div class="try-section">
                 <h3>Try It Yourself</h3>
 
                 <div class="try-container">
                     <label for="aInput">\(a:\)</label>
                     <input type="number" id="aInput" value="2">
-    
+
                     <label for="bInput">\(b:\)</label>
                     <input type="number" id="bInput" value="1000">
-    
+
                     <label for="baseInput"><i>Base:</i></label>
                     <input type="number" id="baseInput" value="10">
-    
+
                     <button onclick="calculate()" aria-label="Compute digital sum">Compute</button>
                 </div>
-    
+
                 <p id="result"></p>
             </div>
-    
+
             <div>
                 <p>
                     You can find the <b>C++</b> code <a href="../Codes/day4.cpp">here</a>.
@@ -184,29 +184,38 @@
             const a = BigInt(aInput.value || 0);
             const b = BigInt(bInput.value || 0);
 
-            if(a <= 0n || b < 0n || base < 2){
-                document.getElementById('result').innerHTML = 
-                    `\\(\\text{Please enter valid positive values for } a, b, \\text{ and base } \\ge 2.\\)`;
-                MathJax.typeset();
-                return;
-            }
+            // Show loading state
+            const resultElement = document.getElementById('result');
+            resultElement.innerHTML = 'Computing...';
 
-            // Compute a^b as BigInt
-            let n = a ** b;
-            let sum = 0n;
+            // Small delay to show loading state
+            setTimeout(() => {
+                if (a <= 0n || b < 0n || base < 2) {
+                    resultElement.innerHTML =
+                        `Please enter valid positive values for a, b, and base ≥ 2.`;
+                    return;
+                }
 
-            // Convert to string in chosen base and sum digits
-            let digits = n.toString(base);
-            for (let ch of digits) {
-                // Convert letter digits (a-f for base>10)
-                if (ch >= 'a') sum += BigInt(ch.charCodeAt(0) - 87);
-                else sum += BigInt(ch);
-            }
+                try {
+                    // Compute a^b as BigInt
+                    let n = a ** b;
+                    let sum = 0n;
 
-            document.getElementById('result').innerHTML =
-                `Digital sum of \\(${a}^{${b}}\\) in base \\(${base}\\) is \\(${sum}\\).`;
-            MathJax.typeset();  // tells MathJax to render the new LaTeX
+                    // Convert to string in chosen base and sum digits
+                    let digits = n.toString(base);
+                    for (let ch of digits) {
+                        // Convert letter digits (a-f for base>10)
+                        if (ch >= 'a') sum += BigInt(ch.charCodeAt(0) - 87);
+                        else sum += BigInt(ch);
+                    }
 
+                    resultElement.innerHTML =
+                        `Digital sum of ${a}<sup>${b}</sup> in base ${base} is <strong>${sum}</strong>.`;
+                } catch (error) {
+                    resultElement.innerHTML =
+                        'Error: The numbers are too large to compute.';
+                }
+            }, 50);
         }
     </script>
 
