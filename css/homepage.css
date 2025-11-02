@@ -1,0 +1,102 @@
+/* Search Box Styles */
+.search-container {
+    display: flex;
+    gap: 0.5rem;
+    margin: 2rem 0 1rem 0;
+    max-width: 500px;
+    align-items: center;
+}
+
+.search-type {
+    padding: 0.75rem;
+    border: 1px solid #dee2e6;
+    border-radius: 6px;
+    background: white;
+    font-size: 1em;
+    min-width: 100px;
+}
+
+.search-container input {
+    flex: 1;
+    padding: 0.75rem;
+    border: 1px solid #dee2e6;
+    border-radius: 6px;
+    font-size: 1em;
+}
+
+.search-container button {
+    padding: 0.75rem 1.5rem;
+    background: #007bff;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 1em;
+    white-space: nowrap;
+}
+
+.search-container button:hover {
+    background: #0056b3;
+}
+
+/* Message Styles */
+.message {
+    padding: 0.75rem;
+    border-radius: 6px;
+    margin: 0.5rem 0;
+}
+
+.message.success {
+    background: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+}
+
+.message.error {
+    background: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+}
+
+/* Progress Stats */
+.progress-stats {
+    text-align: center;
+    padding: 1.5rem;
+    background: #f8f9fa;
+    border-radius: 8px;
+    border: 1px solid #e9ecef;
+    margin: 1.5rem 0;
+}
+
+.progress-stats strong {
+    color: #d73a49;
+    font-size: 1.2em;
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+    .search-container {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .search-type {
+        min-width: auto;
+    }
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+
+    .search-type,
+    .search-container input {
+        background: #2d3748;
+        border-color: #4a5568;
+        color: #e2e8f0;
+    }
+
+    .progress-stats {
+        background: #1a1d23;
+        border-color: #2d3748;
+    }
+}
