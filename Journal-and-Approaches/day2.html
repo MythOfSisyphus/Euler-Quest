@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Day 29 - Collatz Sequence</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/water.css@2/out/water.css">
+
+    <!-- Prism.js CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    
+    <link rel="stylesheet" href="../css/custom.css">
+    <!-- MathJax Configuration -->
+    <script src="../js/mathjax-config.js"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js"></script>
+
+</head>
+<body>
+
+    <div class="container">
+    <h1>Problem: <a href="https://projecteuler.net/problem=14"> #14 Longest Collatz Sequence </a></h1>
+
+    <h3>Thoughts:</h3>
+
+    <div>
+        We can easily write a code which gives us whole chain of terms for any $n \in \mathbb{N}$ then we can get chain length
+        of every $n$ and compare them to get the desired answer. But there are lots of repeted calculations for example, consider
+        of $n = 13$ as given in problem's statement
+
+        $$13 \to 40 \to 20 \to 10 \to 5 \to 16 \to 8 \to 4 \to 2 \to 1$$
+        
+        For $13$ we're calculating chain of $40, 20, 10, 5, 16, 4, 2$ and we can make our code faster if we can use hash-table to store
+        <i>chain length</i>. Let's define $c(n)$ for <i>chain length</i> of $n.$
+
+        <br>
+
+        Suppose we're trying to calculate $c(16),$
+
+        $$16 \to 8$$
+
+        and if we know the $c(8)$ then we can directly say that $c(16) = 1 + c(8),$ right?
+
+        <br>
+
+        This inspired me to write recursive code as follow:
+
+        <div class="code-container">
+            <button class="copy-btn">Copy</button>
+            <pre><code class="language-js">long long longest_Collatz(long long limit){
+    if(limit < 1) return -1;
+
+    unordered_map<long long, long long> get_terms = {{1, 1}};
+
+    function<long long(long long)> dfs = [&](long long n) -> long long {
+        if(get_terms.count(n)) return get_terms[n];
+
+        if(n % 2 == 0){
+            return get_terms[n] = 1 + dfs(n / 2);
+        } else{
+            return get_terms[n] = 1 + dfs(3 * n + 1);
+        }
+    };
+
+    long long result = 1;       // number that gives longest sequence
+    long long max_length = 1;   // length of that sequence
+
+    for(long long i = 1; i <= limit; ++i){
+        long long length = dfs(i);
+        if(length > max_length){
+            max_length = length;
+            result = i;
+        }
+    }
+
+    return result;
+}</code></pre>
+        </div>
+
+        Althought the above code gave me the correct answer, I wanted to write its <i>iterative version</i>.
+        I thought about it a bit then realized that writing <i>iterative version</i> of <i>lambda function</i> <b>dfs</b>
+        is like first building a stack then emptying that stack one by one.
+        
+        <br>
+        Let me explain you step by step what I want to say, we will continue with our chain of $n = 13,$ that is
+        
+        $$13 \to 40 \to 20 \to 10 \to 5 \to 16 \to 8 \to 4 \to 2 \to 1$$
+        
+        and we have reached the end, means at $1$ and we know that $c(1) = 1$, this give us to $c(2),$ right?
+        
+        $$13 \to 40 \to 20 \to 10 \to 5 \to 16 \to 8 \to 4 \to 2$$
+
+        then $c(2)$ gives us $c(4)$ and continuing this process for every number till $13$, the starting number of the chain,
+        we get $c(13) = 1 + c(40) = 10.$
+
+
+        We can write the code for it as follows:
+
+        <div class="code-container">
+            <button class="copy-btn">Copy</button>
+            <pre><code class="language-js">long long longest_Collatz_iterative(long long limit){
+    if(limit < 1) return -1;
+
+    unordered_map<long long, long long> get_terms;
+    get_terms[1] = 1; // base case
+
+    auto compute_length = [&](long long n) -> long long {
+        if(get_terms.count(n)) return get_terms[n];
+
+        long long query_num = n;
+
+        stack<long long> chain; // number in collatz chain.
+        chain.push(query_num);
+
+        while(true){
+            // update query_num with its next number in the chain.
+            query_num = (query_num % 2 == 0) ? query_num / 2 : 3 * query_num + 1;
+
+            // unwind the chain while filling memoized lengths.
+            if(get_terms.count(query_num)){
+                while(!chain.empty()){
+                    long long num = chain.top();
+                    chain.pop();
+                    long long next = (num % 2 == 0) ? num / 2 : 3 * num + 1;
+                    get_terms[num] = 1 + get_terms[next];
+                }
+                break;
+            }
+            
+            // otherwise, keep building the chain.
+            chain.push(query_num);
+        }
+
+        return get_terms[n];
+    };
+
+    long long best_num = 1;       // number that gives longest sequence
+    long long max_length = 1;   // length of that sequence
+
+    for(long long i = 1; i <= limit; ++i){
+        long long length = compute_length(i);
+        if(length > max_length){
+            max_length = length;
+            best_num = i;
+        }
+    }
+
+    return best_num;
+}</code></pre>
+        </div>
+
+        That's how I solved this problem. both codes can be found <a href="../Codes/day29.cpp">here</a>.
+    </div>  
+    </div>
+
+    <!-- JavaScript -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-cpp.min.js"></script>
+    <script src="../js/copy-code.js"></script>
+    
+</body>
+</html>
