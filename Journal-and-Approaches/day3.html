@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Euler Quest: Day 3</title>
+    
+    <!-- Water.css -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/water.css@2/out/water.css">
+    
+    <!-- Prism.js CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="../css/custom.css">
+
+    <!-- MathJax Configuration -->
+    <script src="../js/mathjax-config.js"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js"></script>
+</head>
+<body>
+    <div class="container">
+        <!-- Your HTML goes here. -->
+        <h1>Problem 15: <a href="https://projecteuler.net/problem=15">Lattice Paths</a></h1>
+
+        <p>I studied the Wikipedia page on <a href="https://en.wikipedia.org/wiki/Lattice_path">Lattice Paths</a> and got to know
+        that number of paths from $(0, 0)$ to $(n, m)$ is given by
+        $$\binom{n + m}{n}.$$</p>
+
+        <p>So, we should put $n = m = 20$ to get the desired answer and then I wrote little python code for calculations.</p>
+
+
+        <p>There is also nice <a href="https://projecteuler.net/overview=0015">overview</a> available for this problem that offers three different
+        approaches. I'm surely going to read it as soon as possible.</p>
+
+    </div>
+
+    <!-- JavaScript -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-cpp.min.js"></script>
+    <script src="../js/copy-code.js"></script>
+</body>
+</html>
