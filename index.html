@@ -1,41 +1,90 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Euler Quest</title>
+    <link rel="shortcut icon" href="./css/favicon.png" type="image/x-icon">
+    <!--CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/water.css@2/out/water.css">
+    <link rel="stylesheet" href="./css/custom.css">
+
+    <!-- CSS for search and input button -->
+    <link rel="stylesheet" href="./css/homepage.css">
 </head>
+
 <body>
-    
-    <h1>Euler Quest: My Daily Problem-Solving Journey</h1>
 
-    <div>
+    <div class="container">
+        <h1>Euler Quest: My Daily Problem-Solving Journey</h1>
 
-        My college computer teacher asked all students to send him two <b>C++</b> programs daily.
+        <h3>Reason and Intention behind Creating this Website:</h3>
+        <div>
+            <p>
+                My college computer teacher asked all students to send him two <b>C++</b> programs daily. I liked the
+                idea but
+                I don't want to write simple programs and I have done enough <a
+                    href="https://leetcode.com/">LeetCode</a> problems
+                in the past and I don't want to do that again then I remembered I always wanted to do <a
+                    href="https://projecteuler.net/">Project Euler</a>
+                problems.
+            </p>
+
+            <p>
+                Then I asked myself, <b>"Why not now? Send him one program daily and document it on GitHub pages."</b>
+                I enjoy discussing problems and ways to approach them that's why I am also documenting my whole journey.
+                I know in this journey I will be studying <a href="https://en.wikipedia.org">Wikipedia</a> article,
+                browsing <a href="https://stackoverflow.com/questions">StackOverflow</a>
+                and brainstorming with <a href="https://chatgpt.com/">ChatGPT</a> and that will broaden my horizon and
+                level me up. I am ready for this quest!
+            </p>
+
+            <p>
+                If you want to discuss anything with me—not just math or Project Euler problems—feel free to reach out.
+                I look forward to hearing from you! You can reach me at: <a
+                    href="mailto:luckychouhan369@gmail.com">luckychouhan369@gmail.com</a>
+                or connect on <a href="https://github.com/MythOfSisyphus">GitHub</a>.
+            </p>
+        </div>
+
+        <hr>
+
+        <h3>The Goals:</h3>
+
+        <ul>
+            <li><b>Improve</b> my mathematical and algorithmic problem-solving skills.</li>
+            <li><b>Get rid of</b> the regret of not working on Project Euler problems.</li>
+            <li><b>Send</b> him code daily so that he won't get a chance to taunt me.</li>
+        </ul>
+
+        <hr>
+
+        <h3>The Problems:</h3>
+
+        <!-- Search Box -->
+        <div class="search-container">
+            <select id="searchType" class="search-type">
+                <option value="day">Day</option>
+                <option value="problem">Problem</option>
+            </select>
+            <input type="number" id="searchInput" placeholder="Enter number" min="1">
+            <button onclick="handleSearch()">Search</button>
+        </div>
+        <div id="searchMessage"></div>
+
+
+        <!-- Progress Stats -->
+        <div class="progress-stats">
+            <p><strong id="daysCount">4</strong> problems solved • <strong id="daysStrong">4</strong> days strong</p>
+            <p>Next goal: <strong>10</strong> problems</p>
+        </div>
 
     </div>
 
-    <h3>The Goal</h3>
-
-    <ul>
-        <li><b>Improve</b> my mathematical and algorithmic problem-solving skills.</li>
-        <li><b>Prepare</b> for ISI/CMI entrance exams.</li>
-        <li><b>Build</b> a consistent coding habit.</li>
-        <li><b>Create</b> a public portfolio of my work.</li>
-    </ul>
-
-    <h3>The Problems</h3>
-
-    <div>
-
-        I'm primarily tackling problems from  <a href="https://projecteuler.net/">Project Euler</a>  and <a href="https://leetcode.com/">LeetCode</a>
-        
-    </div>
-
-    <div>
-        <a href="8 Journal-and-Approaches/day28.html"> Day 28 </a>
-    </div>
+    <!-- For search functionality -->
+    <script src="./js/search.js"></script>
 
 </body>
+
 </html>
