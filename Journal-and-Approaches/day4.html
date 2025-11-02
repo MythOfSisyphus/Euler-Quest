@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Exploring Project Euler Problem 16: Power Digit Sum.
+    Includes explanation, C++ code, and an interactive tool to compute digital sums in any base.">
+
+    <title>Euler Quest: Day 4</title>
+    <link rel="shortcut icon" href="../css/favicon.png" type="image/x-icon">
+
+    <!-- Water.css -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/water.css@2/out/water.css">
+
+    <!-- Prism.js CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="../css/custom.css">
+
+    <!-- MathJax Configuration -->
+    <script src="../js/mathjax-config.js"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js"></script>
+</head>
+
+<body>
+    <div class="container">
+        <!-- Your HTML goes here. -->
+        <h1>Problem 16: <a href="http://projecteuler.net/problem=16">Power Digit Sum</a></h1>
+
+        <h2>Thoughts:</h2>
+        <div>
+            <p>
+                When I first read the problem statement, I thought "Wow, this is such an interesting problem!
+                I'd love to spend time thinking about it."
+            </p>
+
+            <p>
+                We can easily solve it in <b>Python</b> or <b>C++</b> using built-in big integer libraries, but I didn't
+                think that would be fair. So, I started thinking, "how can I approach it?" because we can't just define
+                a
+                variable and compute $2^{1000}.$
+            </p>
+
+            <p>
+                I was trying to break $2^{1000}$ in many manageable integer chunks as we know that for any integers $a,
+                b,$ and $c.$
+                <br> If $a + b = c$ then
+                $$(a + b) \equiv c \pmod {10}$$
+
+                I also thought of using the following identity:
+                $$1 + 2 + 2^2 + \cdots + 2^n = 2^{n+1} - 1, \quad n \in \mathbb{N}$$
+            </p>
+
+            <p>
+                When nothing worked, I told all my difficulties to ChatGPT and asked for help.
+                Then ChatGPT gave me a very nice approach. The approach wasn't complex or even hard to code.
+                Let me show you.
+            </p>
+        </div>
+
+        <hr>
+        <!-- ---------------------------------------------------------------------------------------------------- -->
+        
+        <h2>One line intuition</h2>
+
+        <blockquote>
+            Think of the vector as the number written on paper backwards. You repeatedly multiply the whole paper
+            number
+            by $2$ by going left-to-right, writing down the digit you get and carrying the overflow to the next
+            column.
+        </blockquote>
+        
+        <hr>
+        <!-- ---------------------------------------------------------------------------------------------------- -->
+
+        <h2>Brief Explanation and Code:</h2>
+
+        <div>
+            <p>
+                See, we can't define a variable and make it equal to $2^{1000}$ but we can have an array whose elements
+                when written together represent this number.
+            </p>
+
+            <p>
+                And we can build such an array by repeatedly multiplying the number $1$ by $2.$
+            </p>
+
+            <p>
+                Have a look at the following code:
+            </p>
+
+            <div class="code-container">
+                <button class="copy-btn">Copy</button>
+                <pre><code class="language-cpp">int solution(){
+    vector&lt;int&gt; d(1, 1);   // start with number 1: digits = [1]  (represents "1")
+    for (int i = 0; i < 1000; ++i) {   // repeat 1000 times to compute 2^1000
+        int carry = 0;                 // carry between digit positions, starts 0
+        for (size_t j = 0; j < d.size(); ++j) {
+            int x = d[j] * 2 + carry;  // double this digit and add carry from previous
+            d[j] = x % 10;             // low decimal digit stays in this position
+            carry = x / 10;            // high part becomes carry for next position
+        }
+        while (carry) {                // if carry left after top digit, append digits
+            d.push_back(carry % 10);
+            carry /= 10;
+        }
+    }
+    // add all the digits to get the digital sum.
+    return accumulate(d.begin(), d.end(), 0);
+}</code></pre>
+            </div>
+            <p>
+                Let me explain how this approach works. See, our <b>vector&lt;int&gt; d</b> stores digits of
+                $2^{1000}$
+                from right to left.
+            </p>
+            <p>
+                At any point in the first loop, say it represents $2^{5} = 32;$ then
+                <b>vector&lt;int&gt; d = {2, 3}</b> then when we multiply it by $2$ to get <b>vector&lt;int&gt; d = {4,
+                    6}</b>
+                this is what the inner loop does. And if we repeat the step we'll get <b>vector&lt;int&gt; d = {8, 2,
+                    1}</b>
+                Notice that the size
+                of <b>d</b> increases by $1.$ That happens because when we multiply $6$ by $2$, we get carry of $1$ and
+                after that loop
+                ends that's where <b>while(carry)</b> appends the digits.
+            </p>
+        </div> 
+
+        <hr>
+        <!-- ---------------------------------------------------------------------------------------------------- -->
+        <h2>Generalization:</h2>
+        <div>
+            <p>I think it is time to <i>generalize</i> this problem to find <i>digital sum</i> of $a^b$ where $a, b \in
+                \mathbb{N}$</p>
+
+            <p>
+                I'm not attaching code here as I'm going to link my <b>C++</b> file but I'm giving you agency to
+                calculate digital sum
+                of any positive integer in any base.
+            </p>
+            
+            <div class="try-section">
+                <h3>Try It Yourself</h3>
+
+                <div class="try-container">
+                    <label for="aInput">\(a:\)</label>
+                    <input type="number" id="aInput" value="2">
+    
+                    <label for="bInput">\(b:\)</label>
+                    <input type="number" id="bInput" value="1000">
+    
+                    <label for="baseInput"><i>Base:</i></label>
+                    <input type="number" id="baseInput" value="10">
+    
+                    <button onclick="calculate()" aria-label="Compute digital sum">Compute</button>
+                </div>
+    
+                <p id="result"></p>
+            </div>
+    
+            <div>
+                <p>
+                    You can find the <b>C++</b> code <a href="../Codes/day4.cpp">here</a>.
+                </p>
+            </div>
+
+        </div>
+
+        <hr>
+
+    </div>
+
+    <!-- JavaScript -->
+    <script>
+        function calculate() {
+            const baseInput = document.getElementById('baseInput');
+            const aInput = document.getElementById('aInput');
+            const bInput = document.getElementById('bInput');
+
+            const base = parseInt(baseInput.value);
+            const a = BigInt(aInput.value || 0);
+            const b = BigInt(bInput.value || 0);
+
+            if(a <= 0n || b < 0n || base < 2){
+                document.getElementById('result').innerHTML = 
+                    `\\(\\text{Please enter valid positive values for } a, b, \\text{ and base } \\ge 2.\\)`;
+                MathJax.typeset();
+                return;
+            }
+
+            // Compute a^b as BigInt
+            let n = a ** b;
+            let sum = 0n;
+
+            // Convert to string in chosen base and sum digits
+            let digits = n.toString(base);
+            for (let ch of digits) {
+                // Convert letter digits (a-f for base>10)
+                if (ch >= 'a') sum += BigInt(ch.charCodeAt(0) - 87);
+                else sum += BigInt(ch);
+            }
+
+            document.getElementById('result').innerHTML =
+                `Digital sum of \\(${a}^{${b}}\\) in base \\(${base}\\) is \\(${sum}\\).`;
+            MathJax.typeset();  // tells MathJax to render the new LaTeX
+
+        }
+    </script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-c.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-cpp.min.js"></script>
+    <script src="../js/copy-code.js"></script>
+</body>
+
+</html>
