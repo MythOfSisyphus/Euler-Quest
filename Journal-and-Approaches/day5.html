@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Euler Quest: Day 5</title>
+    <link rel="shortcut icon" href="../css/favicon.png" type="image/x-icon">
+
+    <!-- Water.css -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/water.css@2/out/water.css">
+
+    <!-- Prism.js CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="../css/custom.css">
+
+    <!-- MathJax Configuration -->
+    <script src="../js/mathjax-config.js"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js"></script>
+</head>
+
+<body>
+    <div class="container">
+        <!-- Your HTML goes here. -->
+        <h1>Problem 17: <a href="https://projecteuler.net/problem=17">Number Letter Counts</a></h1>
+
+        <div>
+            <h2>Thoughts:</h2>
+
+            <p>
+                I personally like such <b>string</b> problems. I once solved it long ago and had very vague idea on
+                "how to approach this problem" so, I first tried to define <i>Hash Map</i> that maps $n$ to its
+                <i>english wording</i>
+                for $n \in [1, 20].$
+            </p>
+
+            <p>
+                We can easily handle any two digit number. For example, take $n = 89$ rewrite it as $80 + 9.$
+                That's how we pronounce it - <b>Eighty nine</b>.
+            </p>
+
+            <p>
+                Now try yourself and write a function <b>in_words($n$)</b> for $n \in [1, 99]$ right now don't worry
+                about
+                <i>British English number wording</i> or numbers bigger than that.
+            </p>
+
+            <p>
+                We can easily write $n \in [1, 20]$ in words.
+                So, any two digit $n \geq 20$, can be written as $10q + r$ where $q, r \in \mathbb{Z}$ and $0 \leq r
+                \leq q - 1$.
+                And that will be its <i>english wording</i>. Let's try for $n = 69 = 10 \cdot 6 + 9$ then <i>sixty
+                    nine</i>.
+            </p>
+
+            <p>
+                How to write this in code? Here is one liner:
+            </p>
+
+            <div class="code-container">
+                <pre><code class="language-cpp">if(n < 20) return w[n]; // we can write directly.
+// For instance, if n = 89 then n = 80 + 9.
+if(n < 100){
+    return w[n - n%10] + (n%10 ? " " + w[n%10] : "");
+}</code></pre>
+            </div>
+
+            <p>where $w$ is a mapping like:</p>
+<pre><code class="language-cpp">unordered_map&lt;int, string&gt; w = {
+    {1, "one"}, {2, "two"}, ..., {90, "ninety"}
+};</code></pre>
+
+            <p>
+                Now how to handle three digit numbers? You can get the core idea even if you think for just 1 minute.
+            </p>
+
+            <p>
+                We're going to solve this problem in the spirit of two digit numbers.
+                Notice that any three digit number, $n$, can be written as, $n = 100 \cdot q + r$ where $q, r \in
+                \mathbb{Z}$ with $0 \leq r \leq 99$
+            </p>
+
+            <p>
+                For example, take $n = 879$ then write it as $n = 100 \cdot 8 + 79$.
+                First term is <i>eight hundred</i> and second term is <i>seventy nine</i> that you already know how to
+                handle.
+            </p>
+
+
+        </div>
+
+        <hr>
+
+        <div>
+            <h2>British Rule for "and":</h2>
+            <p>
+                You add <strong>"and"</strong> only when:
+            <ul>
+                <li>You're in the <strong>hundreds or higher</strong>, and </li>
+                <li>There is a <strong>non-zero remainder after the hundreds part</strong></li>
+            </ul>
+
+            <strong>In short:</strong> $xyz$ hundred and remainder. <br>
+            But <strong>do not add "and"</strong> if the number ends at hundred.
+            </p>
+
+            <p>
+                Now go ahead and add functionality to handle three digit numbers in your function <b>in_words($n$)</b>
+                with British wording.
+            </p>
+
+            <p><strong>Examples:</strong> 
+                100 $\to$ "one hundred" (no "and"),
+                101 $\to$ "one hundred and one",
+                115 $\to$ "one hundred and fifteen"
+            </p>
+
+        </div>
+
+        <hr>
+
+        <div>
+            <h2>Code and British Wording:</h2>
+
+            <p>
+                If you handle some edge cases and edit your function then it will look something like:
+            </p>
+
+            <div class="code-container">
+                <button class="copy-btn">Copy</button>
+                <pre><code class="language-cpp">// Recursive function to get any "n" in words if n in [1, 1000].
+string in_words(int n){
+    if (n < 1){
+        throw invalid_argument("n should be greater than or equal to 1.");
+    }
+
+    if(n == 1000) return "one thousand";
+        
+    if(n < 20) return w[n]; // we can write directly.
+    // For instance, if n = 89 then n = 80 + 9.
+    if(n < 100){
+        return w[n - n%10] + (n%10 ? " " + w[n%10] : "");
+    }
+        
+    if(n < 1000){
+        int hundreds = n / 100; // how many hundreds?
+        int rest = n % 100; // remainder.
+            
+        string res = w[hundreds] + " hundred";
+        if(rest != 0){
+            // as per British English number wording.
+            res += " and " + in_words(rest);
+        }
+        return res;
+    }
+        
+    return "Please enter n in [1, 1000].";
+}</code></pre>
+            </div>
+
+        </div>
+
+        <hr>
+
+        <div>
+            <h2>Solution Code for Problem $17$:</h2>
+
+            <p>
+                You should try to write <i>iterative version</i> of our function <b>in_words($n$)</b>.
+                I prefer iterative version so, I'm going to write code to get <i>letter counts</i> for all $n \in [1,
+                1000]$
+                same as our <b>in_words($n$)</b>.
+            </p>
+
+            <p><em>Note: We count only letters, excluding spaces and punctuation, 
+                as required by Project Euler problem 17.</em></p>
+
+            <div class="code-container">
+                <button class="copy-btn">Copy</button>
+                <pre><code class="language-cpp">// It gives solution problem 17.
+int count_letters(int n){
+    if(n < 1 || n > 1000){
+        throw invalid_argument("Please enter n in range [1, 1000].");
+    }
+
+    if(n == 1000) return 11; // 11 = strlen("onethousand")
+    int total = 0;
+
+    while(n > 0){
+        if(n <= 20){
+            total += w[n].size();
+            break;
+        }
+        else if(n < 100){
+            total += w[n - n%10].size();
+            if(n%10) total += w[n%10].size();
+            break;
+        }
+        else{
+            int hundreds = n / 100;
+            int rest = n % 100;
+
+            total += w[hundreds].size() + 7; // 7 = strlen("hundred")
+            if (rest != 0) total += 3;       // 3 = strlen("and")
+
+            n = rest;
+        }
+    }
+    return total;
+}</code></pre>
+            </div>
+        </div>
+
+
+        <hr>
+
+        <div>
+            <h2>Generalization:</h2>
+
+            <p>
+                As usual I would like to generalize this problem to get any integer $n \geq 1000$ in words, count
+                letters in it and
+                give you interactive web-playground.
+            </p>
+
+            <p>
+                The main idea lies in how we write numbers. Let me show you some examples,
+
+                $$\begin{array}{ c c c }
+                118,795 & 103,393 & 345,001 \\
+                394,328,390 & 111,222,333 & 484,000,009
+                \end{array}$$
+
+                You may have realized that:
+
+            <blockquote>
+                We chunk numbers by 1000 because <strong>that's how commas group digits</strong> (thousands,
+                millions, billions...), not by tens.
+            </blockquote>
+
+            </p>
+
+            <p>
+                So, we should also work in <i>chunks</i> of 1000's, right? Moreover, we've function to write any number
+                less than
+                or equal to 1000 in words.
+            </p>
+
+            <p>
+                Let's try to write some numbers from our table in words to see how things works:
+            <ul>
+                <li>$118,795: $ One hundred and eighteen thousand seven hundred and ninety five.</li>
+                <li>$103,393: $ One hundred and three thousand three hundred and ninety three.</li>
+                <li>$394,328,390: $ Three hundred and ninety four million three hundred and twenty eight thousand three
+                    hundred and ninety.</li>
+            </ul>
+            </p>
+
+            <p>
+                We can use our function <b>in_words($n$)</b> repeatedly but we have to be careful about when to add
+                <i>thousand, million</i> and <i>billion</i>.
+            </p>
+
+            <p>Have a look at the following code and try its steps with any $n$ you like:</p>
+
+            <div class="code-container">
+                <button class="copy-btn">Copy</button>
+                <pre><code class="language-cpp">// Can handle all numbers less than 1 billion.
+string num_to_letters(int n){
+    vector<string> scale = {"", "thousand", "million"};
+    int i = 0;
+    string result;
+
+    while(n > 0){
+        int chunk = n % 1000;
+        if(chunk != 0){
+            string part = in_words_iterative(chunk);
+            if(scale[i] != "") part += " " + scale[i];
+            result = part + " " + result;
+        }
+        n /= 1000;
+        i++;
+    }
+    return result;
+}</code></pre>
+            </div>
+
+        </div>
+
+        <hr>
+
+        <div class="try-section">
+            <h3>Try It Yourself</h3>
+
+            <div class="try-container">
+                <label for="nInput">\(n:\)</label>
+                <input type="number" id="nInput" value="1">
+
+                <button onclick="compute()" aria-label="Num in words and letter count">Get num in words and letter count</button>
+            </div>
+
+            <div id="result">
+                <p id="inWords"></p>
+                <p id="letterCount"></p>
+            </div>
+        </div>
+        
+        <div>
+            <p>
+                You can find the <b>C++</b> code <a href="../Codes/day5.cpp">here</a>.
+            </p>
+        </div>
+
+        <hr>
+
+    </div>
+
+    <!-- JavaScript Files -->
+    <!-- For "Try it yoursefl" section -->
+    <script src="../js/days/day5.js"></script>
+
+    <!-- Prism.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-c.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-cpp.min.js"></script>
+
+    <!-- For "Copy" button in code blocks. -->
+    <script src="../js/copy-code.js"></script>
+</body>
+
+</html>
