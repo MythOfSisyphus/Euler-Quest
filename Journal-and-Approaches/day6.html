@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Euler Quest: Day 6</title>
+    <link rel="shortcut icon" href="../css/favicon.png" type="image/x-icon">
+    
+    <!-- Water.css -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/water.css@2/out/water.css">
+    
+    <!-- Prism.js CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="../css/custom.css">
+
+    <!-- MathJax Configuration -->
+    <script src="../js/mathjax-config.js"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js"></script>
+</head>
+<body>
+    <div class="container">
+        <!-- Your HTML goes here. -->
+        <h1>Problem 18: <a href="https://projecteuler.net/problem=">Maximum Path Sum I</a></h1>
+
+        <div>
+            <h2>Thoughts:</h2>
+            <p>
+                I enjoyed working on this problem. I'm very eager to write about it yet I'm wondering
+                "how would I explain all the approaches?" I've just finished writing its python code.
+                Let's see what happens, we will start with scratch and end up with most optimized approach
+                for this problem.
+            </p>
+
+            <p>
+                If you reshape given triangle as right angled triangle, you will realize that adjacent numbers of any element
+                $a[i][j]$ are $a[i+1][j]$ and $a[i+1][j+1]$ where $i$ and $j$ denote the row and column number respectively.
+            </p>
+        </div>
+
+        <hr>
+
+        <div>
+            <h2>Approach 1: Explore Every Path</h2>
+            <p>
+                Yeah, you read it right. Exploring every path is very costly and has exponential time complexity.
+                Even after knowing all these complications, we're going to write its code using <i>breadth-first search</i>
+                as it is important and will be helpful in future problems.
+            </p>
+
+            <p>
+                While writing this I am very confused and thinking, "what to explain? how to explain?" because for me this approach
+                is as intutive as adding two digits. See, we will start exploring path from first number after that explore both of its
+                adjacent numbers and keep repeating this step. Have a look at the following code and try to do follow it step by step for
+                any triangle you want.
+            </p>
+
+            <!-- <div class="code-container">
+                <button class="copy-btn">Copy</button>
+                <pre><code class="language-py">Oh boy!</code></pre>
+            </div> -->
+        </div>
+
+        <hr>
+
+        <div>
+            <h2>Approach 2: Bottom-up DP</h2>
+        </div>
+    </div>
+
+    <!-- JavaScript -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
+    <script src="../js/copy-code.js"></script>
+</body>
+</html>
