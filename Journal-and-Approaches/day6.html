@@ -1,17 +1,21 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Step-by-step guide to Project Euler Problem 18: Maximum Path Sum I. 
+    Compare Brute Force BFS (O(2^n)) with optimized Bottom-Up Dynamic Programming (O(n²)). Includes Python code, 
+    complexity analysis, and related LeetCode problems.">
     <title>Euler Quest: Day 6</title>
     <link rel="shortcut icon" href="../css/favicon.png" type="image/x-icon">
-    
+
     <!-- Water.css -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/water.css@2/out/water.css">
-    
+
     <!-- Prism.js CSS -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
-    
+
     <!-- Custom CSS -->
     <link rel="stylesheet" href="../css/custom.css">
 
@@ -19,54 +23,276 @@
     <script src="../js/mathjax-config.js"></script>
     <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js"></script>
 </head>
+
 <body>
     <div class="container">
         <!-- Your HTML goes here. -->
-        <h1>Problem 18: <a href="https://projecteuler.net/problem=">Maximum Path Sum I</a></h1>
+        <h1>Problem 18: <a href="https://projecteuler.net/problem=18" target="_blank" rel="noopener">Maximum Path Sum
+                I</a>
+        </h1>
 
         <div>
             <h2>Thoughts:</h2>
             <p>
-                I enjoyed working on this problem. I'm very eager to write about it yet I'm wondering
-                "how would I explain all the approaches?" I've just finished writing its python code.
-                Let's see what happens, we will start with scratch and end up with most optimized approach
-                for this problem.
+                I enjoyed working on this problem. I'm very eager to write about it, though I'm wondering
+                "how would I explain all the approaches?"
             </p>
 
             <p>
-                If you reshape given triangle as right angled triangle, you will realize that adjacent numbers of any element
-                $a[i][j]$ are $a[i+1][j]$ and $a[i+1][j+1]$ where $i$ and $j$ denote the row and column number respectively.
+                This is one of those problems that looks simple at
+                first, but teaches a really powerful idea. We start with a brute-force approach using
+                <i>Breadth-First Search</i> and then refine it into an elegant and optimal <i>bottom-up dynamic programming</i>
+                solution.
+            </p>
+
+            <p>
+                In a triangle like this, each element $a[i][j]$ has two children: $a[i+1][j]$ and $a[i+1][j+1]$.
+                The goal is to find a path from the top to the bottom with the maximum possible sum.
             </p>
         </div>
 
         <hr>
 
         <div>
-            <h2>Approach 1: Explore Every Path</h2>
+            <h2 id="approach1">Approach 1: Explore Every Path (BFS)</h2>
             <p>
                 Yeah, you read it right. Exploring every path is very costly and has exponential time complexity.
-                Even after knowing all these complications, we're going to write its code using <i>breadth-first search</i>
+                Even after knowing all these complications, we're going to write its code based on <i>breadth-first search</i>
                 as it is important and will be helpful in future problems.
             </p>
 
             <p>
-                While writing this I am very confused and thinking, "what to explain? how to explain?" because for me this approach
-                is as intutive as adding two digits. See, we will start exploring path from first number after that explore both of its
-                adjacent numbers and keep repeating this step. Have a look at the following code and try to do follow it step by step for
-                any triangle you want.
+                While writing this I am very confused and thinking, "what to explain? how to explain?" because for me
+                this approach is as intuitive as adding two digits. See, we will start exploring path from first number, after that we
+                explore both of its adjacent numbers and keep repeating this step. Have a look at the following code and try to do follow it
+                step by step for any triangle you want.
             </p>
 
-            <!-- <div class="code-container">
+            <div class="code-container">
                 <button class="copy-btn">Copy</button>
-                <pre><code class="language-py">Oh boy!</code></pre>
-            </div> -->
+                <pre><code class="language-py">from collections import deque
+
+def max_path_sum_bfs(nums: List[List[int]]) -> int:
+    if not nums:
+        raise ValueError("Triangle must have at least one row.")
+    
+    result = float('-inf') # to store the maximum path sum
+    
+    q = deque() # (row, col, path sum so far)
+    q.append((0, 0, nums[0][0]))
+
+    while q:
+        i, j, p_sum = q.popleft()
+        # When we reach the last row then compare path sums.
+        if i == len(nums) - 1:
+            result = max(result, p_sum)
+        else: # add adjacent elements to the queue with updated path sum
+            q.append((i+1, j, p_sum + nums[i+1][j]))
+            q.append((i+1, j+1, p_sum + nums[i+1][j+1]))
+    
+    return result</code></pre>
+            </div>
+
+            <p>
+                See, how beautifully it explores every path before returning the maximum path sum. It is recommended to
+                initialize <i>result = float('-inf')</i>
+                the reason for this is, we have positive elements in given <i>nums</i> but that will not be the case
+                each time.
+            </p>
+
         </div>
 
         <hr>
 
         <div>
-            <h2>Approach 2: Bottom-up DP</h2>
+            <h2 id="approach2">Approach 2: Bottom-up Dynamic Programming</h2>
+
+            <p>
+                Let's try to optimize <a href="#approach1">Approach 1</a> by thinking carefully on given example,
+                $$\begin{array} {c c c c}
+                3 \\
+                7 & 4 \\
+                2 & 4 & 6 \\
+                8 & 5 & 9 & 3
+                \end{array}$$
+
+                See, there are two path to reach $4$ of third row namely: $3 \to 7 \to 4$ and $3 \to 4 \to 4$
+            </p>
+
+            <p>
+                And in <a href="#approach1">Approach 1</a> we put each element in the queue when we visit it, right?
+                There is so much repetition that
+                we can avoid. Let's try to understand what I want to say.
+            </p>
+
+            <p>
+                Suppose, you're again given the above triangle. Now consider its last row.
+
+                $$8 \quad 5 \quad 9 \quad 3$$
+
+                and we can't go more down so, we try to go up and see last two rows as,
+
+                $$\begin{array} {c c c c}
+                2 & 4 & 6 \\
+                8 & 5 & 9 & 3
+                \end{array}$$
+
+                Now let's try to think what is maximum path sum if we go from each element of first row to second row:
+
+                <ul>
+                    <li><b>For $2:$ </b> $2 \to 8$</li>
+                    <li><b>For $4:$ </b> $4 \to 9$</li>
+                    <li><b>For $6:$ </b> $6 \to 9$</li>
+                </ul>
+
+                As we know max path sum starting from $2, 4$ and $6$ so, let's replace them with their max path sum.
+                Because from last row we can't go down further so, max path is same as element's value but from second last
+                row we can go one step down and we also know them maximum path so, why not rewrite the second last row as:
+
+                $$\begin{array} {c c c c}
+                10 & 13 & 15 \\
+                8 & 5 & 9 & 3
+                \end{array}$$
+
+                Now consider the given triangle again but this time focus on second and third row.
+
+                $$\begin{array} {c c c}
+                7 & 4 \\
+                2 & 4 & 6 \\
+                \end{array}$$
+
+                We want to find max path sum from $7$ and $4$ and we know max path sum from each element of second row,
+                right?
+                So, use the information to update our triangle as,
+
+                $$\begin{array} {c c c c}
+                20 & 19 \\
+                10 & 13 & 15 \\
+                8 & 5 & 9 & 3
+                \end{array}$$
+
+                Repeat the same steps as above for first row to get,
+
+                $$\begin{array} {c c c c}
+                23 \\
+                20 & 19 \\
+                10 & 13 & 15 \\
+                8 & 5 & 9 & 3
+                \end{array}$$
+
+                And $23$ is actual <i>max path sum from</i> $3$, isn't it?
+            </p>
+
+            <p>
+                We started to work with bottom row and went one row up each time that's why it is called <i>bottom-up
+                    dp</i>.
+                If you look closely you will realize that - there is no repetition. If you're doubting its
+                <i>correctness</i> then
+                grab your pen-paper and convince yourself that it is actually <i>correct</i>.
+            </p>
+
+            <p>
+                Here's code for it:
+            </p>
+
+            <div class="code-container">
+                <pre><code class="language-py"># In-place bottom-up dp
+def max_path_sum_inplace(nums: List[List[int]]) -> int:
+    if not nums:
+        raise ValueError("Triangle must have at least one row.")
+
+    for i in range(len(nums) - 2, -1, -1):
+        curr_row = nums[i]
+        next_row = nums[i+1]
+        for j in range(len(curr_row)):
+            curr_row[j] += max(next_row[j], next_row[j+1])
+    
+    return nums[0][0]
+
+# Functional style (concise)
+def max_path_sum_compact(nums: List[List[int]]) -> int:
+    if not nums:
+        raise ValueError("Triangle must have at least one row.")
+    
+    prev = nums[-1].copy()
+    for row in nums[-2::-1]:
+        prev = [a + max(prev[i], prev[i+1]) for i, a in enumerate(row)]
+
+    return prev[0]
+
+</code></pre>
+            </div>
+
         </div>
+
+        <hr>
+
+        <div>
+            <h2 id="complexity">Complexity Analysis:</h2>
+
+            <h3>BFS Approach</h3>
+            <ul>
+                <li><strong>Time Complexity:</strong> $\mathcal{O}(2^n)$ where $n$ is the number of rows.</li>
+                <li><strong>Space Complexity:</strong> $\mathcal{O}(2^n)$ in worst case.</li>
+                <li><strong>Why exponential?</strong> Each node (except leaves) branches into $2$ paths, creating a
+                    binary tree of paths with depth $n$.</li>
+            </ul>
+
+            <h3>Dynamic Programming Approach</h3>
+            <ul>
+                <li><strong>Time Complexity:</strong> $\mathcal{O}(n^2)$ where $n$ is the number of rows.</li>
+                <li><strong>Space Complexity:</strong>
+                    <ul>
+                        <li>In-place version: $\mathcal{O}(1)$ extra space.</li>
+                        <li>Functional version: $\mathcal{O}(n)$ extra space for the `prev` array.</li>
+                    </ul>
+                </li>
+                <li><strong>Why quadratic?</strong> We process each element in the triangular structure exactly once.
+                </li>
+            </ul>
+        </div>
+
+        <hr>
+
+        <div>
+            <h2 id="related">Related Problems:</h2>
+
+            <h3>Project Euler</h3>
+            <ul>
+                <li><a href="https://projecteuler.net/problem=67" target="_blank">Problem 67: Maximum Path Sum II</a> -
+                    Same problem with a much larger triangle (100 rows)</li>
+            </ul>
+
+            <h3>LeetCode</h3>
+            <ul>
+                <li><a href="https://leetcode.com/problems/triangle/" target="_blank">120. Triangle</a> - Identical to
+                    this problem</li>
+                <li><a href="https://leetcode.com/problems/minimum-path-sum/" target="_blank">64. Minimum Path Sum</a> -
+                    Similar concept on a grid</li>
+                <li><a href="https://leetcode.com/problems/unique-paths/" target="_blank">62. Unique Paths</a> -
+                    Counting paths in grid</li>
+                <li><a href="https://leetcode.com/problems/binary-tree-maximum-path-sum/" target="_blank">124. Binary
+                        Tree Maximum Path Sum</a> - More complex version on trees</li>
+            </ul>
+        </div>
+
+        <hr>
+
+        <div>
+            <h2>Conclusion:</h2>
+
+            <p>
+                Both approaches are beautiful in their own way - BFS build intuition, while DP gives a clean
+                and optimal solution. A nice extension is reconstruction the actual path using a "choice matrix"
+                - I might add that soon!
+            </p>
+
+            <p>
+                Found a mistake or have a better idea? Feel free to reach out!
+                <br> Bye!!
+            </p>
+        </div>
+
     </div>
 
     <!-- JavaScript -->
@@ -74,4 +300,5 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
     <script src="../js/copy-code.js"></script>
 </body>
+
 </html>
