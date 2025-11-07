@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Solving Project Euler Problem 19 - Counting Sundays using Python, modular arithmetic, and leap year calculations">
+    <meta name="author" content="Lucky Chouhan">
+    <title>Euler Quest: Day 7</title>
+    <link rel="shortcut icon" href="../css/favicon.png" type="image/x-icon">
+    
+    <!-- Water.css -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/water.css@2/out/water.css">
+    
+    <!-- Prism.js CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="../css/custom.css">
+
+    <!-- MathJax Configuration -->
+    <script src="../js/mathjax-config.js"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js"></script>
+</head>
+<body>
+    <div class="container">
+        <!-- Your HTML goes here. -->
+        <h1>Problem 19: <a href="https://projecteuler.net/problem=19">Counting Sundays</a></h1>
+
+        <div>
+            <p>
+               I enjoyed working on this problem. It is very easy to understand but requires some time of deliberate thinking
+               to come up with an algorithmic approach. 
+            </p>
+
+            <p>
+                I thought about this problem many times, broke it down into simple sub-problems, and tested various edge cases.
+                My first difficulty was to understand and write code to check whether a given year is <i>leap year</i> or not.
+                I watched a nice video by <a href="https://www.youtube.com/@CGPGrey">CGP Grey</a> titled 
+                <a href="https://youtu.be/xX96xng7sAE?si=iOYx7bS75nPSPjx3">"Leap Years Don't Happen Every 4 Years"</a>
+                that helped me in understanding leap years.
+            </p>
+
+            <p>
+                See, leap year occurs in every 4 years, yet we have to be very careful when we talk about years such as 1600, 1700, 1900,
+                and 2000. Although these years are also divisible by 4, they are not leap years.
+                
+            </p>
+            <p>
+                So, the rule of thumb is: A year is leap if it is divisible by 4 and if that year is divisble by 100 but not 400 then it is not leap.
+                Examples:
+                <ul>
+                    <li>1924 was a leap year.</li>
+                    <li>1928 was a leap year.</li>
+                    <li>1900 was not a leap year.</li>
+                    <li>2024 was a leap year.</li>
+                    <li>2028 will be a leap year.</li>
+                </ul>
+            </p>
+            
+            <p>
+                In programming terms: a year is a leap year if (year % 4 == 0 and year % 100 != 0) or (year % 400 == 0)
+            </p>
+        </div>
+
+        <hr>
+
+        <div>
+            <h2>Modular Arithmetic on Weekdays:</h2>
+
+            <p>
+                Suppose, I tell you a day and then ask you to tell me what was the day before or after 10 days from the given day, then
+                how would you go about answering this?
+            </p>
+
+            <p>
+                See, we have only seven days and each day gets repeated in 7 days, for any given day there will be same day
+                after and before $7i$ days where $i \in \mathbb{Z}$.
+            </p>
+
+            <p>
+                I tried to write little Python code for it and thankfully I succeeded in writing it.
+            </p>
+
+            <div class="code-container">
+                <pre><code class="language-py">def get_day(day: str, n: int) -> str:
+    """
+    day: should be one of "sun", "mon", ...
+    n: can be any integer.
+    """
+    if not isinstance(n, int):
+        raise ValueError("Please enter an integer n.")
+    if n == 0:
+        return day
+    days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]
+    if day not in days:
+        raise ValueError("Please enter valid day name like Sun, Mon, ....")
+    
+    i = days.index(day)
+    return days[(i + n) % 7]</code></pre>
+            </div>
+
+            <p>
+                Python always output positive number when working with <i>remainder</i>.
+                For instance, if we have <i>day = "Mon"</i> and $n = -10$  then Python will give us $(i + n)$ % 7 = 5 not $-2$
+                and we don't have to worry about that as: $$-2 \equiv 5 \pmod 7$$
+            </p>
+
+            <p>
+                We wouldn't use <i>days[$(i + n)$ % 7]</i> if Python could output <i>day[-2]</i>. To understand why, you need to know how negative
+                indices work in Python.
+            </p>
+        </div>
+
+        <hr>
+
+        <div>
+            <h2>Crux Move</h2>
+
+            <p>
+                See, if we know what day is on $1$st January of any year then from the above function we can get what day will be after
+                $31, 40, 100$ or any arbitrary days, right? Then we should use this idea to get what day will be on $1$st of every month
+                starting from February to all the way up to December.
+            </p>
+
+            <p>
+                We'll do for year $1901$ here then I will show you code that works for any year.
+            </p>
+
+            <p>
+                It was <i>Wednesday</i> on $1$ January $1901$ so, using <i>get_day(day = "Wed", n = 31)</i> gives us day on $1$ February $1901$, right?
+                Now the problem is to know what day it had been on $1$st of March.
+
+                <br>Here are two ways to do it:
+                <ul>
+                    <li>Either update given day with <i>day = get_day(day = "Wed", n = 31)</i> and call the function again as <i>get_day(day, 28/29)</i></li>
+                    <li>or maintain a counter which tells us how many days after $1$ March occurs since $1$ January</li>
+                </ul>
+            </p>
+
+            <p>
+                Consider the following code, read it line by line and try to understand how "cum_days" is working. We didn't use
+                <i>get_day</i> function as it was just for understanding.
+            </p>
+            
+            <div class="code-container">
+                <pre><code class="language-py">import calendar
+def get_sundays_in_year(first_day: str, year: int)
+    """
+    first_day: weekday name of Jan 1 of `year` (one of "Sun","Mon",...,"Sat")
+    year: integer year
+    Returns: (num_months_with_first_day_sunday, weekday_name_of_Jan1_next_year)
+    """
+    days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]
+    if first_day not in days:
+        raise ValueError("Please enter valid day name (Sun, Mon, ...).")
+    if not isinstance(year, int):
+        raise ValueError("Please enter integer year.")
+    # days in month indexed 1..12
+    num_days = [0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
+    if calendar.isleap(year):
+        num_days[2] = 29
+
+    first_index = days.index(first_day)
+    cum_days = 0
+    count = 0
+
+    for m in range(1, 13):
+        weekday_of_first = (first_index + cum_days) % 7
+        if days[weekday_of_first] == "Sun":
+            count += 1
+        cum_days += num_days[m]
+    
+    next_year_first = days[(first_index + cum_days) % 7]
+    return count, next_year_first
+</code></pre>
+            </div>
+
+        </div>
+
+        <hr>
+
+        <div>
+            <h2>Final Solution:</h2>
+
+            <p>
+                We can run the function <i>get_sundays_in_year(first_day: str, year: int)</i> in <i>loop</i> to get the desired
+                answer, aren't we? So, let's do it.
+            </p>
+
+            <div class="code-container">
+                <pre><code class="language-py">def solution():
+    first_day = "Wed" # 1 Jan 1901 was Wednesday.
+    total = 0
+
+    for year in range(1901, 2001):
+        sunday_count, next_year_first = get_sundays_in_year(first_day, year)
+        total += sunday_count
+        first_day = next_year_first
+    
+    return total</code></pre>
+            </div>
+        </div>
+
+        <hr>
+
+        <div>
+            <h2>Conclusion:</h2>
+
+            <p>
+                I think I took long to come up with such simple approach, though I got it myself, haha.
+                <br> As usual code can be found <a href="../Codes/day7.py">here</a>. Bye!!
+            </p>
+        </div>
+
+    </div>
+
+    <!-- JavaScript -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
+    <script src="../js/copy-code.js"></script>
+</body>
+</html>
