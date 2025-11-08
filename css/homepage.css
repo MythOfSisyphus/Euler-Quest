@@ -7,15 +7,6 @@
     align-items: center;
 }
 
-.search-type {
-    padding: 0.75rem;
-    border: 1px solid #dee2e6;
-    border-radius: 6px;
-    background: white;
-    font-size: 1em;
-    min-width: 100px;
-}
-
 .search-container input {
     flex: 1;
     padding: 0.75rem;
@@ -79,16 +70,11 @@
         flex-direction: column;
         align-items: stretch;
     }
-
-    .search-type {
-        min-width: auto;
-    }
 }
 
 /* Dark mode support */
 @media (prefers-color-scheme: dark) {
 
-    .search-type,
     .search-container input {
         background: #2d3748;
         border-color: #4a5568;
