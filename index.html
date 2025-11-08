@@ -4,6 +4,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Euler Quest - My daily journey solving Project Euler problems.
+    Join me as I tackle mathematical and computational challenges, sharing code solutions and learning experiences.">
     <title>Euler Quest</title>
     <link rel="shortcut icon" href="./css/favicon.png" type="image/x-icon">
     <!--CSS -->
@@ -18,6 +20,13 @@
 
     <div class="container">
         <h1>Euler Quest: My Daily Problem-Solving Journey</h1>
+
+        <div>
+            Welcome to my <a href="https://projecteuler.net/">Project Euler</a> journey! I'm solving interesting mathematical and computational
+            problems daily, documenting my approaches, struggles, and solutions. This isn't about speed-running through problems, but 
+            about deep understanding and learning something new each day.
+        </div>
+
 
         <h3>Reason and Intention behind Creating this Website:</h3>
         <div>
@@ -61,14 +70,15 @@
         <hr>
 
         <h3>The Problems:</h3>
+        
+        <p>
+            I'm working on <i>Euler Quest</i> daily. Jump to any day using the search below 
+            or browse the <a href="archives.html">complete archives</a>.
+        </p>
 
         <!-- Search Box -->
         <div class="search-container">
-            <select id="searchType" class="search-type">
-                <option value="day">Day</option>
-                <option value="problem">Problem</option>
-            </select>
-            <input type="number" id="searchInput" placeholder="Enter number" min="1">
+            <input type="number" id="searchInput" placeholder="Enter day number" min="1">
             <button onclick="handleSearch()">Search</button>
         </div>
         <div id="searchMessage"></div>
