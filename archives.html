@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Euler Quest: Archives</title>
+    <meta name="description" content="Complete archive of all Project Euler problems I've solved, with detailed explanations and code solutions.">
+    <link rel="shortcut icon" href="./css/favicon.png" type="image/x-icon">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/water.css@2/out/water.css">
+    <link rel="stylesheet" href="./css/custom.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Euler Quest: Archives</h1>
+        
+        <p>
+            A chronological collection of all Project Euler problems I've tackled. Each entry includes my thought process, 
+            solution code, and mathematical insights. Problems are organized by the day I solved them.
+        </p>
+        
+        <table>
+            <thead>
+                <tr>
+                    <th style="text-align: center; width: 15%">Day</th>
+                    <th style="width: 60%">Title</th>
+                    <th style="text-align: center; width: 25%">Project Euler</th>
+                </tr>
+            </thead>
+            <tbody id="archivesTableBody">
+                <!-- JavaScript will populate this -->
+            </tbody>
+        </table>
+        
+        <div style="text-align: center; margin-top: 2rem;">
+            <a href="./index.html">← Back to Homepage</a>
+        </div>
+    </div>
+
+    <script src="./js/archives-data.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const tbody = document.getElementById('archivesTableBody');
+            
+            archivesData.forEach(entry => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td style="text-align: center">${entry.day}</td>
+                    <td>
+                        <a href="Journal-and-Approaches/day${entry.day}.html">
+                            ${entry.title}
+                        </a>
+                    </td>
+                    <td style="text-align: center">${entry.problem}</td>
+                `;
+                tbody.appendChild(row);
+            });
+        });
+    </script>
+</body>
+</html>
