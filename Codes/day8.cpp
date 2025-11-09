@@ -45,7 +45,7 @@ int solution(int n){
     // any num in nums can be written as sum of two abundant numbers.
     vector<bool> can_be_written(n+1, false);
     int m = abundant_nums.size();
-    for(int i = 1; i < m; ++i){
+    for(int i = 0; i < m; ++i){
         for(int j = i; j < m; ++j){
             int s = abundant_nums[i] + abundant_nums[j];
             if(s > n) break;
