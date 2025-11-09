@@ -1,24 +1,32 @@
 // ===== CONFIGURATION =====
 const CURRENT_DAY = 8; // Update this when adding new days
 
-// Handle search functionality
+function clearMessageAfterDelay(delay = 3000) {
+    setTimeout(() => {
+        const messageDiv = document.getElementById('searchMessage');
+        messageDiv.textContent = '';
+        messageDiv.className = '';
+    }, delay);
+}
+
 function handleSearch() {
     const input = document.getElementById('searchInput');
-    const messageDiv = document.getElementById('searchMessage');
     const dayNum = parseInt(input.value);
     
     if (!dayNum || dayNum < 1) {
         showMessage('Please enter a valid day number', 'error');
         input.value = '';
+        clearMessageAfterDelay(3000);
         return;
     }
 
     if (dayNum > CURRENT_DAY) {
         showMessage(`I haven't reached day ${dayNum} yet! Currently on day ${CURRENT_DAY}.`, 'error');
         input.value = '';
+        clearMessageAfterDelay(3000);
     } else {
         showMessage(`Redirecting to Day ${dayNum}...`, 'success');
-        input.value = ''; // Clear input immediately after successful validation
+        input.value = '';
         setTimeout(() => {
             window.location.href = `Journal-and-Approaches/day${dayNum}.html`;
         }, 800);
