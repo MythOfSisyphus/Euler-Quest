@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Project Euler Problem 23 Solution: Non-Abundant Sums. C++ code using a divisor sum sieve, algorithm explanation, and mathematical analysis of abundant numbers.">
+    <title>Euler Quest: Day 8</title>
+    <link rel="shortcut icon" href="../css/favicon.png" type="image/x-icon">
+    
+    <!-- Water.css -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/water.css@2/out/water.css">
+    
+    <!-- Prism.js CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="../css/custom.css">
+
+    <!-- MathJax Configuration -->
+    <script src="../js/mathjax-config.js"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js"></script>
+</head>
+<body>
+    <div class="container">
+
+        <h1>Problem 23: <a href="https://projecteuler.net/problem=23">Non-Abundant Sums</a></h1>
+        
+        <div>
+            <h2>Initial Thoughts:</h2>
+
+            <p>
+                This problem is straightforward to understand and implement. Once you figure out how to find proper divisors of any given
+                number $n$ then the problem begins to seem <i>trivial</i>.
+            </p>
+
+            <p>
+                In this post we are going to talk about naive and optimized approach for finding all proper divisors of $n$.
+                After that we will see how to use that to get sum of all positive numbers that can't be written as sum of two
+                abundant numbers. After that we will see some mathematical properties of <i>Abundant Numbers</i>.
+            </p>
+
+        </div>
+
+        <hr>
+
+        <div>
+            <h2>Naively Summing all Proper Divisors:</h2>
+
+            <p>
+                Notice that $n = \sqrt{n} \cdot \sqrt{n}$, so if we write $n = a \cdot b$ then both $a$ and $b$ cannot be simultaneously
+                less or greater than
+                $\sqrt{n}$. If one is less than $\sqrt{n}$ then other should be greater than $\sqrt{n}$ (Why?)
+            </p>
+
+            <p>
+                So, if we know $a$ then we can get $b$ as $b = n / a$. Have a look at the following code and follow it step by step
+                to understand what I want to say.
+            </p>
+
+            <div class="code-container">
+                <button class="copy-btn">Copy</button>
+                <pre><code class="language-cpp">#include&ltcmath&gt
+int sum_proper_divisors(int n){
+    int total = 1; // 1 as n's first proper divisor.
+    int limit = static_cast&lt;int&gt;(sqrt(n));
+
+    // sum of proper divisors.
+    for(int i = 2; i <= limit; ++i){
+        if(n % i == 0){
+            total += i;
+            if(i != n / i) total += n / i;
+        }
+    }
+    return total;
+}</code></pre>
+            </div>
+
+        </div>
+
+        <hr>
+
+        <div>
+
+            <h2>Using Sieve Method to Sum Proper Divisors:</h2>
+
+            <p>
+                See, instead of calling <i>sum_proper_divisors(int n)</i> many times, we can maintain an array <i>div_sum</i>
+                which tells us proper divisor sum of every positive integer $\leq n$.
+            </p>
+
+            <p>
+                To fill this array, we only iterate $i$ up to $n/2$ because no number greater than $n/2$ (except $n$ itself) can be a proper divisor of $n$
+            </p>
+
+            <p>
+                We're going to add $i$ to each <i>div_sum[j]</i> if $i$ divides $j$ with $i \ne j.$
+            </p>
+
+            <p>
+                Have a look at the following code:
+            </p>
+
+            <div class="code-container">
+                <button class="copy-btn">Copy</button>
+                <pre><code class="language-cpp">#include&lt;vector&gt;
+vector&lt;int&gt; sieve_sum_proper_divisors(int n){
+    vector&lt;int&gt; div_sum(n+1, 1); // 1 is always a proper divisor for n > 1.
+    div_sum[0] = 0; // not used.
+    div_sum[1] = 0; // 1 has no proper divisor.
+
+    for(int i = 2; i <= n / 2; ++i){
+        for(int j = 2*i; j <= n; j+=i){
+            div_sum[j] += i;
+        }
+    }
+
+    return div_sum;
+}
+</code></pre>
+            </div>
+
+        </div>
+
+        <hr>
+
+        <div>
+            <h2>Solution Code for the Problem:</h2>
+
+            <div class="code-container">
+                <button class="copy-btn">Copy</button>
+                <pre><code class="language-cpp">int solution(int n){
+    if(n < 1) throw invalid_argument("n should be greater than or equal to 1.");
+    vector&lt;int&gt; div_sum = sieve_sum_proper_divisors(n+1);
+    vector&lt;int&gt; abundant_nums;
+
+    for(int i = 1; i <= n; ++i){
+        if(div_sum[i] > i) abundant_nums.push_back(i);
+    }
+
+    // any num in nums can be written as sum of two abundant numbers.
+    vector&lt;bool&gt; can_be_written(n+1, false);
+    int m = abundant_nums.size();
+    for(int i = 0; i < m; ++i){
+        for(int j = i; j < m; ++j){
+            int s = abundant_nums[i] + abundant_nums[j];
+            if(s > n) break;
+            can_be_written[s] = true;
+        }
+    }
+
+    int total_sum = 0; // required sum
+    for(int i = 1; i <= n; ++i){
+        // notice "!"
+        if(!can_be_written[i]) total_sum += i;
+    }
+
+    return total_sum;
+}</code></pre>
+            </div>
+
+            <p>
+                Putting $n = 28123$ gives us our desired answer.
+                <br>Code can be found <a href="../Codes/day8.cpp">here</a>.
+            </p>
+        </div>
+
+
+        <hr>
+
+        <div>
+            <h2>Math Time: Some Properties of Abundant Numbers</h2>
+
+            <p>
+                I didn't know about <i>Abundant Numbers</i> before coming across this problem.
+                I studied the <a href="https://en.wikipedia.org/wiki/Abundant_number">Wikipedia article on abundant numbers</a> and
+                <a href="https://www.jstor.org/stable/27958492">PERFECT NUMBERS, ABUNDANT NUMBERS, AND DEFICIENT NUMBERS by Robert W. Prielipp</a>
+                Here, I'll discuss some of the interesting facts and theorems I encountered, along with their proofs.
+            </p>
+
+            <p>
+                I'm going to use standard notations so, $\sigma(n)$ denotes the sum of all positive divisors of $n$.
+                $$\sigma(n) = \sum_{d | n} d = \sum_{d | n} \frac{n}{d}$$
+            </p>
+            <ul>
+                <li>$n$ is <i>perfect number</i> if $\sigma(n) = 2n$</li>
+                <li>$n$ is <i>deficient number</i> if $\sigma(n) < 2n$</li>
+                <li>$n$ is <i>abundant number</i> if $\sigma(n) > 2n$</li>
+            </ul>
+
+            <p>We all know that $6$ is a perfect number because $\sigma(6) = 2 \cdot 6$</p>
+
+            <p><b>Fact 1: </b>Any positive integer $n = 6k$ for $k \geq 2$ is abundant number.
+
+                Because,
+                $$1 + \frac{n}{2} + \frac{n}{3} + \frac{n}{6} = n + 1 > n$$
+                we didn't even sum all proper divisors of $n$ and still above sum is greater than $n.$
+            </p>
+
+            <p><b>Fact 2: </b>The smallest odd abundant number is 945.</p>
+
+            <p>
+                <b>Theorem 1: </b> Any proper divisor of a perfect number is a deficient number.
+                <br>
+                <b>Proof: </b> Suppose $P$ is a perfect numbers and $k \, | P$ with $k \ne P$ then,
+                $$k = \prod_{i = 1}^{n} p_i^{a_i}, \quad P = \prod_{i = 1}^{n} p_i^{b_i}$$
+
+                where $p_i$'s are distinct prime numbers and $a_i$'s and $b_i$'s are positive integers with $a_i \leq b_i$.
+                <br>
+                Since, $k$ is a proper divisor, so there exists $j \in [1, n] : a_j < b_j$ this gives us,
+
+                $$\begin{align}
+                \prod_{i = 1}^{n} (p_1^{a_i + b_i + 1} - p_i^{b_i}) &< \prod_{i = 1}^{n} (p_1^{a_i + b_i + 1} - p_i^{a_i}) \\
+                \prod_{i = 1}^{n} p_i^{b_i} (p_1^{a_i + 1} - 1) &< \prod_{i = 1}^{n} p_i^{a_i} (p_1^{b_i + 1} - 1) \\
+                \prod_{i = 1}^{n} (p_1^{a_i + 1} - 1) &< \frac{k}{P} \prod_{i = 1}^{n} (p_1^{b_i + 1} - 1) \\
+                \prod_{i = 1}^{n} \frac{(p_1^{a_i + 1} - 1)}{p_i - 1} &< \frac{k}{P} \prod_{i = 1}^{n} \frac{(p_1^{b_i + 1} - 1)}{p_i - 1} \\
+                \sigma(k) &< \frac{k}{P} \, \sigma(P) \\
+                \implies \sigma(k) &< 2k
+                \end{align}$$
+
+                Hence proved!
+            </p>
+
+            <p>
+                <b>Theorem 2: </b> Every multiple of a perfect or abundant number (greater than the number itself) is abundant.
+                <br>
+                <b>Proof: </b> This proof follows similar multiplicative principles.
+            </p>
+
+        </div>
+
+        <hr>
+        <div style="text-align: center; margin-top: 3rem;">
+            <a href="../index.html">Back to Home</a>
+        </div>
+
+    </div>
+
+    <!-- JavaScript -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-c.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-cpp.min.js"></script>
+    <script src="../js/copy-code.js"></script>
+</body>
+</html>
